@@ -4,7 +4,7 @@
 
 int Strassen::strassenStop = 8;
 
-BinaryMatrix Strassen::strassenMultiplication(int size, BinaryMatrix &a, BinaryMatrix &b)
+BinaryMatrix Strassen::strassenMultiplication(int size, const BinaryMatrix &a, const BinaryMatrix &b)
 {
 	if (size == strassenStop) {
 		return BinaryMatrix::multiplication(a, b);
@@ -23,18 +23,19 @@ BinaryMatrix Strassen::strassenMultiplication(int size, BinaryMatrix &a, BinaryM
 	}
 }
 
-BinaryMatrix *Strassen::prepareCommonProcedures(int size, BinaryMatrix &a, BinaryMatrix &b)
+BinaryMatrix *Strassen::prepareCommonProcedures(int size, const BinaryMatrix &a, const BinaryMatrix &b)
 {
 	BinaryMatrix *m = new BinaryMatrix[7];
 	BinaryMatrix *A = a.doubleBisection();
 	BinaryMatrix *B = b.doubleBisection();
-	m[0] = strassenMultiplication(size / 2, BinaryMatrix::addition(A[0], A[3]), BinaryMatrix::addition(B[0], B[3]));
-	m[1] = strassenMultiplication(size / 2, BinaryMatrix::addition(A[2], A[3]), B[0]);
-	m[2] = strassenMultiplication(size / 2, A[0], BinaryMatrix::subtraction(B[1], B[3]));
-	m[3] = strassenMultiplication(size / 2, A[3], BinaryMatrix::subtraction(B[2], B[0]));
-	m[4] = strassenMultiplication(size / 2, BinaryMatrix::addition(A[0], A[1]), B[3]);
-	m[5] = strassenMultiplication(size / 2, BinaryMatrix::subtraction(A[2], A[0]), BinaryMatrix::addition(B[0], B[1]));
-	m[6] = strassenMultiplication(size / 2, BinaryMatrix::subtraction(A[1], A[3]), BinaryMatrix::addition(B[2], B[3]));
+	int newSize = size / 2;
+	m[0] = strassenMultiplication(newSize, BinaryMatrix::addition(A[0], A[3]), BinaryMatrix::addition(B[0], B[3]));
+	m[1] = strassenMultiplication(newSize, BinaryMatrix::addition(A[2], A[3]), B[0]);
+	m[2] = strassenMultiplication(newSize, A[0], BinaryMatrix::subtraction(B[1], B[3]));
+	m[3] = strassenMultiplication(newSize, A[3], BinaryMatrix::subtraction(B[2], B[0]));
+	m[4] = strassenMultiplication(newSize, BinaryMatrix::addition(A[0], A[1]), B[3]);
+	m[5] = strassenMultiplication(newSize, BinaryMatrix::subtraction(A[2], A[0]), BinaryMatrix::addition(B[0], B[1]));
+	m[6] = strassenMultiplication(newSize, BinaryMatrix::subtraction(A[1], A[3]), BinaryMatrix::addition(B[2], B[3]));
 	delete[]A;
 	delete[]B;
 	return m;

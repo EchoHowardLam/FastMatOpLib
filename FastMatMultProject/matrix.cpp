@@ -101,7 +101,7 @@ ValType **BinaryMatrix::randMatrix(int new_size)
 	return newMat;
 }
 
-BinaryMatrix *BinaryMatrix::doubleBisection()
+BinaryMatrix *BinaryMatrix::doubleBisection() const
 {
 	if (size <= 1) return nullptr;
 	int newDim = size / 2;
@@ -172,7 +172,7 @@ BinaryMatrix BinaryMatrix::mergeBisection(int new_size, const BinaryMatrix *c)
 	return BinaryMatrix(new_size, newMat);
 }
 
-void BinaryMatrix::print()
+void BinaryMatrix::print() const
 {
 	// i is rows/vertical
 	// j is columns
