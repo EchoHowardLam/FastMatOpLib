@@ -95,7 +95,7 @@ ValType **BinaryMatrix::randMatrix(int new_size)
 		newMat[i] = new ValType[new_size];
 		for (int j = 0; j < new_size; j++)
 		{
-			newMat[i][j] = (ValType) (rand() % 1000);
+			newMat[i][j] = (ValType) (rand() % 1000) / 500;
 		}
 	}
 	return newMat;
@@ -172,20 +172,6 @@ BinaryMatrix BinaryMatrix::mergeBisection(int new_size, const BinaryMatrix *c)
 	return BinaryMatrix(new_size, newMat);
 }
 
-void BinaryMatrix::print() const
-{
-	// i is rows/vertical
-	// j is columns
-	for (int i = 0; i < size; i++)
-	{
-		for (int j = 0; j < size; j++)
-			//printf("%8.0f ", data[i][j]);
-			printf("%8d ", data[i][j]);
-		printf("\n");
-	}
-	printf("\n");
-}
-
 BinaryMatrix BinaryMatrix::addition(BinaryMatrix a, const BinaryMatrix &b)
 {
 	for (int i = 0; i < a.size; i++)
@@ -210,6 +196,69 @@ BinaryMatrix BinaryMatrix::multiplication(const BinaryMatrix &a, const BinaryMat
 			for (int k = 0; k < a.size; k++)
 				newMat.data[i][j] += a.data[i][k] * b.data[k][j];
 	return newMat;
+}
+
+BinaryMatrix BinaryMatrix::scalarMultiplication(BinaryMatrix a, const double &v)
+{
+	for (int i = 0; i < a.size; i++)
+		for (int j = 0; j < a.size; j++)
+			a.data[i][j] = v * a.data[i][j];
+	return a;
+}
+
+BinaryMatrix BinaryMatrix::negation(BinaryMatrix a)
+{
+	for (int i = 0; i < a.size; i++)
+		for (int j = 0; j < a.size; j++)
+			a.data[i][j] = -a.data[i][j];
+	return a;
+}
+
+int BinaryMatrix::compareMatrix(const BinaryMatrix &a, const BinaryMatrix &b)
+{
+	if (a.size != b.size) return 0;
+	for (int i = 0; i < a.size; i++)
+		for (int j = 0; j < a.size; j++)
+			if (a.data[i][j] != b.data[i][j]) return 0;
+	return 1;
+}
+
+int BinaryMatrix::isIdentityMatrix(const BinaryMatrix &a)
+{
+	for (int i = 0; i < a.size; i++)
+		for (int j = 0; j < a.size; j++)
+		{
+			if (i == j)
+			{
+				if (fabs(a.data[i][j] - MULT_IDENTITY) > 0.01) return 0;
+			}
+			else {
+				if (fabs(a.data[i][j] - ADD_IDENTITY) > 0.01) return 0;
+			}
+		}
+	return 1;
+}
+
+void BinaryMatrix::print() const
+{
+	// i is rows/vertical
+	// j is columns
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			//printf("%8d ", data[i][j]);
+			printf("%8.3f ", data[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+}
+
+ValType BinaryMatrix::det() const
+{
+	//if (size != 2) return MULT_IDENTITY;
+	return (data[0][0] * data[1][1] - data[0][1] * data[1][0]);
 }
 
 void BinaryMatrix::cleanUpMemory()

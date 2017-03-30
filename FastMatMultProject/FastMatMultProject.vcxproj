@@ -110,11 +110,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="blockwise_inversion.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="strassen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="blockwise_inversion.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="strassen.h" />
   </ItemGroup>

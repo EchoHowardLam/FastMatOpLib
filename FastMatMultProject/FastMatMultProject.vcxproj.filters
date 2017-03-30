@@ -24,12 +24,18 @@
     <ClCompile Include="strassen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="blockwise_inversion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="strassen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="blockwise_inversion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
