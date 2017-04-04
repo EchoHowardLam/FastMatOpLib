@@ -21,18 +21,22 @@ void strassenTestCase(int size)
 		BinaryMatrix a = Strassen::genRandomBinaryMatrix(size);
 		BinaryMatrix b = Strassen::genRandomBinaryMatrix(size);
 
-		//Strassen::strassenMultiplication(size, a, b);
+		//a.print();
+		//b.print();
 
 		time = clock();
-		BinaryMatrix n = BinaryMatrix::multiplication(a, b); // .print();
+		BinaryMatrix n = BinaryMatrix::multiplication(a, b);
 		temp[0][i] = (clock() - time) / ((long double)CLOCKS_PER_SEC);
 		//printf("Time for normal: %.2lf\n", (clock() - time) / ((double)CLOCKS_PER_SEC) * 1000.0);
 		
 		time = clock();
-		BinaryMatrix s = Strassen::strassenMultiplication(size, a, b); // .print();
+		BinaryMatrix s = Strassen::multiplication(a, b);
 		temp[1][i] = (clock() - time) / ((long double)CLOCKS_PER_SEC);
 		//printf("Time for strassen (stop at %dx%d): %.2lf\n--------------------------\n", Strassen::strassenStop, Strassen::strassenStop, (clock() - time) / ((double)CLOCKS_PER_SEC) * 1000.0);
 		
+		//n.print();
+		//s.print();
+
 		verified *= (BinaryMatrix::compareMatrix(n, s) == 1);
 	}
 
@@ -78,28 +82,48 @@ void strassenTest()
 
 void blockInvertTestCase(int size)
 {
-	long double temp[1][TEST_NUM];
+	long double temp[2][TEST_NUM];
 	int verified = 1;
+	int invertible = 1;
+	int success;
 	for (int i = 0; i < TEST_NUM; i++)
 	{
 		long double time;
 		BinaryMatrix a = Strassen::genRandomBinaryMatrix(size);
 
 		time = clock();
-		BinaryMatrix b = BlockInvert::blockwiseInversion(a);
+		success = 1;
+		BinaryMatrix b = BlockInvert::blockwiseInversion(a, success);
 		//b.print();
 		//BinaryMatrix::scalarMultiplication(b, a.det()).print();
 		temp[0][i] = (clock() - time) / ((long double)CLOCKS_PER_SEC);
 
+		time = clock();
+		BinaryMatrix c = BlockInvert::blockwiseInversion(a, success);
+		temp[1][i] = (clock() - time) / ((long double)CLOCKS_PER_SEC);
+
+		if (!success)
+		{
+			invertible = 0;
+			continue;
+		}
+		verified *= (BinaryMatrix::isIdentityMatrix(BinaryMatrix::multiplication(a, b)) == 1);
 		verified *= (BinaryMatrix::isIdentityMatrix(BinaryMatrix::multiplication(a, b)) == 1);
 	}
 
 	printf("Size of Matrix = %d, Blockwise inversion stopping at size = 2\n", size);
-	printf("Blockwise inversion,\n");
+	printf("Blockwise inversion(normal multiplication),\n");
 	for (int i = 0; i < TEST_NUM; i++)
 		printf("Time: %.5lfs\n", temp[0][i]);
 
-	printf("Result(s) of calculation %s\n\n", (verified == 1) ? "agree(s)" : "disagree(s)!!!");
+	printf("Blockwise inversion(strassen algorithm),\n");
+	for (int i = 0; i < TEST_NUM; i++)
+		printf("Time: %.5lfs\n", temp[1][i]);
+
+	if (invertible)
+		printf("Result(s) of calculation %s\n\n", (verified == 1) ? "agree(s)" : "disagree(s)!!!");
+	else
+		printf("The matrix is not invertible\n");
 }
 
 void blockInvertTest()
@@ -119,9 +143,11 @@ void blockInvertTest()
 int main()
 {
 	srand((unsigned int)time(NULL));
+	//strassenTestCase(16);
 	//strassenTest();
 	//blockInvertTestCase(32);
 	blockInvertTest();
+	printf("\nAll calculations are done...\n");
 	for (;;);
 	return 0;
 }

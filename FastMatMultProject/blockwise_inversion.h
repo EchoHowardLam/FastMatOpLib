@@ -6,7 +6,8 @@
 class BlockInvert
 {
 public:
-	static BinaryMatrix blockwiseInversion(const BinaryMatrix &a);
+	static BinaryMatrix blockwiseInversion(const BinaryMatrix &a, int &success);
+	static BinaryMatrix blockwiseInversionStrassenMulVersion(const BinaryMatrix &a, int &success);
 private:
-	static BinaryMatrix invert2x2Matrix(BinaryMatrix a);
+	static BinaryMatrix invert2x2Matrix(BinaryMatrix a, int &success);
 };

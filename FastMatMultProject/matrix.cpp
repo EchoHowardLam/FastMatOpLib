@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <stdlib.h>
+#include <math.h>
 
 using namespace std;
 
@@ -219,7 +220,7 @@ int BinaryMatrix::compareMatrix(const BinaryMatrix &a, const BinaryMatrix &b)
 	if (a.size != b.size) return 0;
 	for (int i = 0; i < a.size; i++)
 		for (int j = 0; j < a.size; j++)
-			if (a.data[i][j] != b.data[i][j]) return 0;
+			if (fabs(a.data[i][j] - b.data[i][j]) > 0.01) return 0;
 	return 1;
 }
 
