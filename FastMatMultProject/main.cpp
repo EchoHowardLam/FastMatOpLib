@@ -107,8 +107,8 @@ void blockInvertTestCase(int size)
 			invertible = 0;
 			continue;
 		}
-		verified *= (BinaryMatrix::isIdentityMatrix(BinaryMatrix::multiplication(a, b)) == 1);
-		verified *= (BinaryMatrix::isIdentityMatrix(BinaryMatrix::multiplication(a, b)) == 1);
+		verified *= (BinaryMatrix::isIdentityMatrix(Strassen::multiplication(a, b)) == 1);
+		verified *= (BinaryMatrix::isIdentityMatrix(Strassen::multiplication(a, b)) == 1);
 	}
 
 	printf("Size of Matrix = %d, Blockwise inversion stopping at size = 2\n", size);

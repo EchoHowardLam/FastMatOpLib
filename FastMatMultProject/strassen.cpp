@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-int Strassen::strassenStop = 16;
+int Strassen::strassenStop = 128;
 
 BinaryMatrix Strassen::multiplication(const BinaryMatrix &a, const BinaryMatrix &b)
 {
