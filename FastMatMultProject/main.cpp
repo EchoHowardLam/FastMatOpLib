@@ -99,7 +99,7 @@ void blockInvertTestCase(int size)
 		temp[0][i] = (clock() - time) / ((long double)CLOCKS_PER_SEC);
 
 		time = clock();
-		BinaryMatrix c = BlockInvert::blockwiseInversion(a, success);
+		BinaryMatrix c = BlockInvert::blockwiseInversionStrassenMulVersion(a, success);
 		temp[1][i] = (clock() - time) / ((long double)CLOCKS_PER_SEC);
 
 		if (!success)
@@ -108,7 +108,7 @@ void blockInvertTestCase(int size)
 			continue;
 		}
 		verified *= (BinaryMatrix::isIdentityMatrix(Strassen::multiplication(a, b)) == 1);
-		verified *= (BinaryMatrix::isIdentityMatrix(Strassen::multiplication(a, b)) == 1);
+		verified *= (BinaryMatrix::isIdentityMatrix(Strassen::multiplication(a, c)) == 1);
 	}
 
 	printf("Size of Matrix = %d, Blockwise inversion stopping at size = 2\n", size);
