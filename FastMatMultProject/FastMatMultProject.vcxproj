@@ -111,13 +111,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="blockwise_inversion.cpp" />
+    <ClCompile Include="complex.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matrix.cpp" />
+    <ClCompile Include="polynomial_multiplication.cpp" />
     <ClCompile Include="strassen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="blockwise_inversion.h" />
+    <ClInclude Include="complex.h" />
     <ClInclude Include="matrix.h" />
+    <ClInclude Include="polynomial_multiplication.h" />
+    <ClInclude Include="shared_definition.h" />
     <ClInclude Include="strassen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

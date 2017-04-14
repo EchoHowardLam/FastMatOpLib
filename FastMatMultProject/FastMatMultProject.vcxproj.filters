@@ -27,6 +27,12 @@
     <ClCompile Include="blockwise_inversion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="complex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="polynomial_multiplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h">
@@ -36,6 +42,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="blockwise_inversion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="complex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shared_definition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="polynomial_multiplication.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

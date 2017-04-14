@@ -1,11 +1,15 @@
 #pragma once
 
+#include <iostream>
+
+#include <stdlib.h>
+#include <math.h>
+
+#include "shared_definition.h"
+
 #define INT_USED 0
 
-#define ADD_IDENTITY 0.0
-#define MULT_IDENTITY 1.0
-
-typedef double ValType;
+using namespace std;
 
 class BinaryMatrix
 {

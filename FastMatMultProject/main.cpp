@@ -1,11 +1,14 @@
 #include <iostream>
 
+#include <algorithm>
 #include <stdlib.h>
 #include <time.h>
 
+#include "complex.h"
 #include "matrix.h"
 #include "strassen.h"
 #include "blockwise_inversion.h"
+#include "polynomial_multiplication.h"
 
 using namespace std;
 
@@ -140,14 +143,76 @@ void blockInvertTest()
 	blockInvertTestCase(1024);
 }
 
+void polyMulTestCase(int size)
+{
+	long double temp[2][TEST_NUM];
+	bool verified = true;
+	for (int i = 0; i < TEST_NUM; i++)
+	{
+		long double time;
+		ValType *p = FPM::genRandomPoly(size);
+		ValType *q = FPM::genRandomPoly(size);
+		int newSizeNaive;
+		int newSizeFast;
+
+		//FPM::printPoly(p, size); printf("\n");
+		//FPM::printPoly(q, size); printf("\n");
+
+		time = clock();
+		ComplexNumber *naiveResult = NaivePM::PolyMultiplication(p, q, size, newSizeNaive);
+		temp[0][i] = (clock() - time) / ((long double)CLOCKS_PER_SEC);
+
+		time = clock();
+		ComplexNumber *fastResult = FPM::PolyMultiplication(p, q, size, newSizeFast);
+		temp[1][i] = (clock() - time) / ((long double)CLOCKS_PER_SEC);
+
+		//FPM::printPoly(naiveResult, newSizeNaive); printf("\n");
+		//FPM::printPoly(fastResult, newSizeFast); printf("\n");
+
+		// always check for the smaller ones to avoid out_of_range error, but actually newSizeFast > newSizeNaive is always true
+		verified &= FPM::verifyPoly(naiveResult, fastResult, min(newSizeNaive, newSizeFast));
+
+		delete[]p;
+		delete[]q;
+		delete[]naiveResult;
+		delete[]fastResult;
+	}
+
+	printf("Number of Coefficient = %d\n", size);
+	printf("Naive Polynomial Multiplication(n^2),\n");
+	for (int i = 0; i < TEST_NUM; i++)
+		printf("Time: %.5lfs\n", temp[0][i]);
+
+	printf("Fast Polynomial Multiplication(n log n),\n");
+	for (int i = 0; i < TEST_NUM; i++)
+		printf("Time: %.5lfs\n", temp[1][i]);
+
+	printf("Result(s) of calculation %s\n\n", (verified == 1) ? "agree(s)" : "disagree(s)!!!");
+}
+
+void polyMulTest()
+{
+	polyMulTestCase(64);
+	polyMulTestCase(128);
+	polyMulTestCase(256);
+	polyMulTestCase(512);
+	polyMulTestCase(1024);
+	polyMulTestCase(2048);
+	polyMulTestCase(4096);
+	polyMulTestCase(8192);
+	polyMulTestCase(16384);
+}
+
 int main()
 {
 	srand((unsigned int)time(NULL));
 	//strassenTestCase(16);
 	//strassenTest();
 	//blockInvertTestCase(32);
-	blockInvertTest();
+	//blockInvertTest();
+	//polyMulTestCase(5);
+	polyMulTest();
 	printf("\nAll calculations are done...\n");
-	for (;;);
+	getchar();
 	return 0;
 }
