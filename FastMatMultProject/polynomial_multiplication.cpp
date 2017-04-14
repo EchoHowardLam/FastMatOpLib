@@ -6,7 +6,7 @@ ComplexNumber *FastPolynomialMultiplication::PolyMultiplication(ValType *p, ValT
 	ComplexNumber *pfft = FFT(p, degree, padded_result_deg);
 	ComplexNumber *qfft = FFT(q, degree, padded_result_deg);
 	ComplexNumber *unprocessed_r = pointwiseMultiplication(pfft, qfft, padded_result_deg);
-	ComplexNumber *r = inverse_recursiveFFT(unprocessed_r, padded_result_deg);
+	ComplexNumber *r = inverse_recursiveFFT(unprocessed_r, padded_result_deg, ComplexNumber(0.0, 0.0), false);
 	for (int i = 0; i < padded_result_deg; i++)
 		r[i] /= (double)padded_result_deg;
 	delete[]pfft;
@@ -30,7 +30,7 @@ ComplexNumber *FastPolynomialMultiplication::FFT(ValType *a, int len, int &new_l
 		t[i] = ComplexNumber(a[i], 0.0);
 	for (; i < calLen; i++)
 		t[i] = ComplexNumber();
-	ComplexNumber *result = recursiveFFT(t, calLen);
+	ComplexNumber *result = recursiveFFT(t, calLen, ComplexNumber(0.0, 0.0), false);
 	delete[]t;
 	return result;
 }
@@ -103,7 +103,7 @@ ComplexNumber *FastPolynomialMultiplication::pointwiseMultiplication(ComplexNumb
 	return result;
 }
 
-ComplexNumber *FastPolynomialMultiplication::recursiveFFT(ComplexNumber *a, int len)
+ComplexNumber *FastPolynomialMultiplication::recursiveFFT(ComplexNumber *a, int len, ComplexNumber wn, bool wn_given)
 {
 	if (len == 1)
 	{
@@ -111,7 +111,10 @@ ComplexNumber *FastPolynomialMultiplication::recursiveFFT(ComplexNumber *a, int 
 		ret[0] = a[0];
 		return ret;
 	}
-	ComplexNumber wn(cos(2 * M_PI / len), sin(2 * M_PI / len));
+	if (!wn_given)
+		wn = ComplexNumber(cos(2 * M_PI / len), sin(2 * M_PI / len));
+	else
+		wn *= wn;
 	ComplexNumber w(1.0, 0.0);
 	ComplexNumber *evenA = new ComplexNumber[len / 2];
 	ComplexNumber *oddA = new ComplexNumber[len / 2];
@@ -121,8 +124,8 @@ ComplexNumber *FastPolynomialMultiplication::recursiveFFT(ComplexNumber *a, int 
 			oddA[oddi++] = a[i];
 		else // even
 			evenA[eveni++] = a[i];
-	ComplexNumber *evenF = recursiveFFT(evenA, len / 2);
-	ComplexNumber *oddF = recursiveFFT(oddA, len / 2);
+	ComplexNumber *evenF = recursiveFFT(evenA, len / 2, wn, !wn_given);
+	ComplexNumber *oddF = recursiveFFT(oddA, len / 2, wn, !wn_given);
 	delete[]evenA;
 	delete[]oddA;
 	ComplexNumber *result = new ComplexNumber[len];
@@ -137,7 +140,7 @@ ComplexNumber *FastPolynomialMultiplication::recursiveFFT(ComplexNumber *a, int 
 	return result;
 }
 
-ComplexNumber *FastPolynomialMultiplication::inverse_recursiveFFT(ComplexNumber *a, int len)
+ComplexNumber *FastPolynomialMultiplication::inverse_recursiveFFT(ComplexNumber *a, int len, ComplexNumber wn, bool wn_given)
 {
 	if (len == 1)
 	{
@@ -145,7 +148,10 @@ ComplexNumber *FastPolynomialMultiplication::inverse_recursiveFFT(ComplexNumber 
 		ret[0] = a[0];
 		return ret;
 	}
-	ComplexNumber wn(cos(-2 * M_PI / len), sin(-2 * M_PI / len));
+	if (!wn_given)
+		wn = ComplexNumber(cos(-2 * M_PI / len), sin(-2 * M_PI / len));
+	else
+		wn *= wn;
 	ComplexNumber w(1.0, 0.0);
 	ComplexNumber *evenA = new ComplexNumber[len / 2];
 	ComplexNumber *oddA = new ComplexNumber[len / 2];
@@ -155,8 +161,8 @@ ComplexNumber *FastPolynomialMultiplication::inverse_recursiveFFT(ComplexNumber 
 			oddA[oddi++] = a[i];
 		else // even
 			evenA[eveni++] = a[i];
-	ComplexNumber *evenF = inverse_recursiveFFT(evenA, len / 2);
-	ComplexNumber *oddF = inverse_recursiveFFT(oddA, len / 2);
+	ComplexNumber *evenF = inverse_recursiveFFT(evenA, len / 2, wn, !wn_given);
+	ComplexNumber *oddF = inverse_recursiveFFT(oddA, len / 2, wn, !wn_given);
 	delete[]evenA;
 	delete[]oddA;
 	ComplexNumber *result = new ComplexNumber[len];

@@ -20,8 +20,8 @@ public:
 	static bool verifyPoly(ComplexNumber *a, ComplexNumber *b, int len);
 private:
 	static ComplexNumber *pointwiseMultiplication(ComplexNumber *a, ComplexNumber *b, int len);
-	static ComplexNumber *recursiveFFT(ComplexNumber *a, int len);
-	static ComplexNumber *inverse_recursiveFFT(ComplexNumber *a, int len);
+	static ComplexNumber *recursiveFFT(ComplexNumber *a, int len, ComplexNumber wn, bool wn_given);
+	static ComplexNumber *inverse_recursiveFFT(ComplexNumber *a, int len, ComplexNumber wn, bool wn_given);
 };
 
 typedef FastPolynomialMultiplication FPM;

@@ -201,6 +201,7 @@ void polyMulTest()
 	polyMulTestCase(4096);
 	polyMulTestCase(8192);
 	polyMulTestCase(16384);
+	polyMulTestCase(32768);
 }
 
 int main()
